@@ -1,0 +1,76 @@
+#! /usr/bin/env php
+<?php 
+
+// print_r($argv);
+$command = $argv[1]; // c:index
+
+$command_array = explode(':', $command);
+list($c, $name) = $command_array;
+
+// echo $c;
+// echo "\n";
+// echo $name;
+
+if ($c == 'c'){
+  make_controller($name);
+}
+if ($c == 'v'){
+  make_view($name);
+}
+if ($c == 'r'){
+  make_route($name);
+}
+if ($c == 'a'){
+  make_controller($name);
+  make_view($name);
+  make_route($name);
+}
+
+
+function make_controller ($name) {
+  $file = fopen("controllers/{$name}.controller.php", 'w');
+$text = <<<TEXT
+<?php
+
+require __DIR__ . '/../views/${name}.view.php';
+TEXT;
+
+fwrite($file, $text);
+fclose($file);
+echo "your controller $name created successfully \n";
+}
+
+
+
+function make_view ($name) {
+  $file = fopen("views/{$name}.view.php", 'w');
+$text = <<<TEXT
+<?php require 'header.php' ?>
+this is {$name} page
+<?php require 'footer.php'?>
+
+TEXT;
+
+fwrite($file, $text);
+fclose($file);
+echo "your view $name created successfully \n";
+}
+
+
+
+function make_route ($name) {
+  $file = fopen("{$name}.php", 'w');
+$text = <<<TEXT
+<?php
+
+require 'controllers/${name}.controller.php';
+TEXT;
+
+fwrite($file, $text);
+fclose($file);
+echo "your route $name created successfully \n";
+}
+
+
+//https://www.youtube.com/channel/UCG7jZR0b7NRKcqmMmAWQiFg?view_as=subscriber
+
